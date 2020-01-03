@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 import { AuthUserContext } from '../Session';
+import { Button } from '@material-ui/core';
 
 const Navigation = () => (
     <div>
@@ -16,34 +17,38 @@ const Navigation = () => (
 );
 
 const NavigationAuth = () => (
-    <ul>
-      <li>
-        <Link to={ROUTES.LANDING}>Landing</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.HOME}>Home</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ACCOUNT}>Account</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
-      <li>
-        <SignOutButton />
-      </li>
-    </ul>
+    <div style={{position: 'absolute', right: '20px'}}>
+      <Button 
+          href={ROUTES.LANDING}
+          style={{marginTop: '20px'}}
+          >Tell Me</Button>
+      <Button 
+          href={ROUTES.HOME}
+          style={{marginTop: '20px'}}
+          >Home</Button>
+      <Button 
+          href={ROUTES.ACCOUNT}
+          style={{marginTop: '20px'}}
+          >Account</Button>
+      <Button 
+          href={ROUTES.ADMIN}
+          style={{marginTop: '20px'}}
+          >Admin</Button>
+      <SignOutButton />
+    </div>
   );
 
 const NavigationNonAuth = () => (
-    <ul>
-      <li>
-        <Link to={ROUTES.LANDING}>Landing</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-      </li>
-    </ul>
+    <div style={{position: 'absolute', right: '20px'}}>
+        <Button 
+            href={ROUTES.LANDING}
+            style={{marginTop: '20px'}}
+            >Landing</Button>
+        <Button 
+            href={ROUTES.SIGN_IN}
+            style={{marginTop: '20px'}}
+            >Sign In</Button>
+    </div>
 );
 
 export default Navigation;
