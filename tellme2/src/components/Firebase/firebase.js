@@ -14,8 +14,22 @@ const config = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
+
+    /* Helper */
+
+    this.fieldValue = app.firestore.FieldValue;
+    this.emailAuthProvider = app.auth.EmailAuthProvider;
+
+    /* Firebase APIs */
+
     this.auth = app.auth();
     this.db = app.firestore();
+
+    /* Social Sign In Method Provider */
+
+    this.googleProvider = new app.auth.GoogleAuthProvider();
+    this.facebookProvider = new app.auth.FacebookAuthProvider();
+    this.twitterProvider = new app.auth.TwitterAuthProvider();
   }
 
   // *** Auth API ***
@@ -26,6 +40,15 @@ class Firebase {
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
 
+  oSignInWithGoogle = () =>
+    this.auth.signInWithPopup(this.googleProvider);
+
+  doSignInWithFacebook = () =>
+    this.auth.signInWithPopup(this.facebookProvider);
+
+  doSignInWithTwitter = () =>
+    this.auth.signInWithPopup(this.twitterProvider);
+
   doSignOut = () => this.auth.signOut();
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
@@ -33,18 +56,48 @@ class Firebase {
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
 
+  // *** Merge Auth and DB User API *** //
+
+  onAuthUserListener = (next, fallback) =>
+  this.auth.onAuthStateChanged(authUser => {
+    if (authUser) {
+      this.user(authUser.uid)
+        .get()
+        .then(snapshot => {
+          const dbUser = snapshot.data();
+
+          // default empty roles
+          if (!dbUser.roles) {
+            dbUser.roles = {};
+          }
+
+          // merge auth and db user
+          authUser = {
+            uid: authUser.uid,
+            email: authUser.email,
+            emailVerified: authUser.emailVerified,
+            providerData: authUser.providerData,
+            ...dbUser,
+          };
+
+          next(authUser);
+        });
+    } else {
+      fallback();
+    }
+  });
+
   // *** User API ***
-  user = uid => this.db.ref(`users/${uid}`);
-  
-  users = () => this.db.ref('users');
 
-  // *** Project API ***
+  user = uid => this.db.doc(`users/${uid}`);
 
-  doCreateProject = (id, desc, createdAt) => this.db.collection('projects').add({id: id, 
-                                                                      desc: desc, 
-                                                                      createdAt: createdAt})
+  users = () => this.db.collection('users');
 
-  getProjects = () => this.db.collection('projects')
+  // *** Message API ***
+
+  project = uid => this.db.doc(`projects/${uid}`);
+
+  projects = () => this.db.collection('projects');
 }
 
 export default Firebase;

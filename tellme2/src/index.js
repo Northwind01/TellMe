@@ -13,9 +13,9 @@ import Firebase, { FirebaseContext } from './components/Firebase';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#8561c5',
-      main: '#673ab7',
-      dark: '#482880',
+      light: '#C5CAE9',
+      main: '#3F51B5',
+      dark: '#303F9F',
       contrastText: '#fff',
     },
     secondary: {
@@ -24,9 +24,6 @@ const theme = createMuiTheme({
       dark: '#b28900',
       contrastText: '#000',
     },
-  },
-  status: {
-    danger: 'orange',
   },
 });
 

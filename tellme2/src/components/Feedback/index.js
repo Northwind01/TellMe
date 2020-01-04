@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'recompose';
 
 import { withAuthorization } from '../Session';
-import Projects from '../Projects';
+import Feedback from './Feedback';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -38,7 +38,7 @@ const styles = (theme) => ({
   },
 });
 
-class HomePage extends React.Component {
+class FeedbackPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -52,7 +52,7 @@ class HomePage extends React.Component {
           <CssBaseline />
           <main className={this.classes.image}>
             {/* Hero unit */}
-            <Projects />
+            <Feedback />
           </main>
             {/* Footer */}
           <footer className={this.classes.footer}>
@@ -60,7 +60,7 @@ class HomePage extends React.Component {
               Tell Me
             </Typography>
             <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-              Bring your customers into focus!
+              Bringing customers into focus!
             </Typography>
             <Copyright />
           </footer>
@@ -75,4 +75,4 @@ const condition = authUser => !!authUser;
 export default compose(
   withAuthorization(condition),
   withStyles(styles)
-)(HomePage);
+)(FeedbackPage);
